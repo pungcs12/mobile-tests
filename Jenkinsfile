@@ -9,19 +9,24 @@ spec:
   - name: pytest
     image: python:3.11
     command:
-    - cat
+      - cat
     tty: true
 """
     }
   }
 
+  options {
+    timestamps()
+  }
+
   environment {
-    APPIUM_SERVER_URL = "http://host.docker.internal:4723"
+    // Change this to your Mac IP (NOT localhost)
+    APPIUM_SERVER_URL = "http://172.25.91.253:4723/wd/hub"
   }
 
   stages {
 
-    stage('Checkout source') {
+    stage('Checkout') {
       steps {
         checkout scm
       }
@@ -39,10 +44,14 @@ spec:
       }
     }
 
-    stage('Run tests') {
+    stage('Run mobile tests') {
       steps {
         container('pytest') {
-          sh 'pytest --junitxml=reports/result.xml'
+          sh '''
+            mkdir -p reports
+            pytest -v \
+              --junitxml=reports/result.xml
+          '''
         }
       }
     }
@@ -51,8 +60,16 @@ spec:
   post {
     always {
       script {
-        if (fileExists('reports/result.xml')) {
-          junit 'reports/result.xml'
+        try {
+          container('pytest') {
+            if (fileExists('reports/result.xml')) {
+              junit 'reports/result.xml'
+            } else {
+              echo 'No test report found, skipping junit'
+            }
+          }
+        } catch (err) {
+          echo "Post actions skipped: ${err}"
         }
       }
     }
