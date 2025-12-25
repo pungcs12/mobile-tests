@@ -1,7 +1,6 @@
 pipeline {
   agent {
     kubernetes {
-      label 'mobile-test'
       defaultContainer 'pytest'
 
       yaml """
@@ -42,13 +41,11 @@ spec:
       }
     }
 
-    stage('Run mobile tests') {
+    stage('Run tests') {
       steps {
         container('pytest') {
           sh '''
-            pytest mobile-tests \
-              --appium-url=${APPIUM_SERVER} \
-              -v
+            pytest mobile-tests -v
           '''
         }
       }
