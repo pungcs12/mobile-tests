@@ -1,8 +1,19 @@
 pipeline {
   agent {
-    docker {
-      image 'python:3.11'
-      args '-u root'
+    kubernetes {
+      label 'python-agent'
+      defaultContainer 'python'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: python
+    image: python:3.11
+    command:
+    - cat
+    tty: true
+"""
     }
   }
 
@@ -15,19 +26,23 @@ pipeline {
 
     stage('Install deps') {
       steps {
-        sh '''
-          python --version
-          pip --version
-          pip install -r requirements.txt
-        '''
+        container('python') {
+          sh '''
+            python --version
+            pip --version
+            pip install -r requirements.txt
+          '''
+        }
       }
     }
 
     // stage('Run tests') {
     //   steps {
-    //     sh '''
-    //       pytest -v
-    //     '''
+    //     container('python') {
+    //       sh '''
+    //         pytest -v
+    //       '''
+    //     }
     //   }
     // }
   }
