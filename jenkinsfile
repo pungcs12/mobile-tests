@@ -1,0 +1,45 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: pytest
+    image: python:3.11
+    command:
+    - cat
+    tty: true
+"""
+    }
+  }
+
+  stages {
+    stage('Install dependencies') {
+      steps {
+        container('pytest') {
+          sh '''
+            pip install -r requirements.txt
+          '''
+        }
+      }
+    }
+
+    stage('Run mobile tests') {
+      steps {
+        container('pytest') {
+          sh '''
+            pytest tests --junitxml=report.xml
+          '''
+        }
+      }
+    }
+  }
+
+  post {
+    always {
+      junit 'report.xml'
+    }
+  }
+}
