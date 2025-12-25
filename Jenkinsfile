@@ -1,9 +1,27 @@
 pipeline {
   agent any
+
   stages {
-    stage('PROOF') {
+    stage('Checkout') {
       steps {
-        echo 'THIS IS FROM GITHUB'
+        checkout scm
+      }
+    }
+
+    stage('Install deps') {
+      steps {
+        sh '''
+          python3 --version || true
+          pip3 install -r requirements.txt
+        '''
+      }
+    }
+
+    stage('Run tests') {
+      steps {
+        sh '''
+          pytest -v
+        '''
       }
     }
   }
