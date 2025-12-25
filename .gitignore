@@ -1,0 +1,87 @@
+# -----------------------------------
+# OS / Editor
+# -----------------------------------
+*backup*
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# -----------------------------------
+# Kubernetes generated / runtime
+# -----------------------------------
+*.log
+*.tmp
+*.pid
+
+# Helm
+charts/
+Chart.lock
+*.tgz
+
+# Kustomize
+kustomize-build/
+
+# -----------------------------------
+# Secrets (VERY IMPORTANT)
+# -----------------------------------
+*.env
+.env
+.env.*
+secrets.yaml
+secret.yaml
+**/secrets/*.yaml
+**/*secret*.yaml
+
+# -----------------------------------
+# Kubernetes local configs
+# -----------------------------------
+.kube/
+kubeconfig
+kubeconfig-*
+config/local/
+overlays/local/
+
+# -----------------------------------
+# CI/CD (Jenkins, pipelines)
+# -----------------------------------
+jenkins_home/
+workspace/
+pipeline/tmp/
+pipeline/cache/
+
+# -----------------------------------
+# Terraform (if used with K8s)
+# -----------------------------------
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+terraform.tfvars
+
+# -----------------------------------
+# Logs & test artifacts
+# -----------------------------------
+logs/
+reports/
+allure-results/
+allure-report/
+
+# -----------------------------------
+# Language-specific (Python / Java)
+# -----------------------------------
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+target/
+*.class
+
+# -----------------------------------
+# Docker
+# -----------------------------------
+*.tar
+docker-compose.override.yml

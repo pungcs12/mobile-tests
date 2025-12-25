@@ -1,6 +1,9 @@
 pipeline {
   agent {
     kubernetes {
+      label 'mobile-test'
+      defaultContainer 'pytest'
+
       yaml """
 apiVersion: v1
 kind: Pod
@@ -9,19 +12,14 @@ spec:
   - name: pytest
     image: python:3.11
     command:
-      - cat
+    - cat
     tty: true
 """
     }
   }
 
-  options {
-    timestamps()
-  }
-
   environment {
-    // Change this to your Mac IP (NOT localhost)
-    APPIUM_SERVER_URL = "http://172.25.91.253:4723/wd/hub"
+    APPIUM_SERVER = "http://host.docker.internal:4723"
   }
 
   stages {
@@ -36,9 +34,21 @@ spec:
       steps {
         container('pytest') {
           sh '''
-            python --version
+            python -V
             pip install --upgrade pip
             pip install -r requirements.txt
+          '''
+        }
+      }
+    }
+
+    stage('Run mobile tests') {
+      steps {
+        container('pytest') {
+          sh '''
+            pytest mobile-tests \
+              --appium-url=${APPIUM_SERVER} \
+              -v
           '''
         }
       }
