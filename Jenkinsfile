@@ -39,12 +39,10 @@ spec:
       }
     }
 
-    stage('Run mobile tests') {
+    stage('Run tests') {
       steps {
         container('pytest') {
-          sh '''
-            pytest tests --junitxml=report.xml
-          '''
+          sh 'pytest --junitxml=reports/result.xml'
         }
       }
     }
@@ -52,7 +50,11 @@ spec:
 
   post {
     always {
-      junit 'report.xml'
+      script {
+        if (fileExists('reports/result.xml')) {
+          junit 'reports/result.xml'
+        }
+      }
     }
   }
 }
