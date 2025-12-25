@@ -1,13 +1,16 @@
 import pytest
 from appium import webdriver
+import os
+
+app_path = os.path.join(os.getcwd(), "ApiDemos-debug.apk")
 
 @pytest.fixture(scope="session")
 def driver():
     caps = {
         "platformName": "Android",
         "automationName": "UiAutomator2",
-        "deviceName": "Android Emulator",
-        "app": "/workspace/app.apk"
+        "deviceName": "emulator-5554",
+        "app": app_path
     }
 
     driver = webdriver.Remote(
