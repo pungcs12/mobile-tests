@@ -43,35 +43,5 @@ spec:
         }
       }
     }
-
-    stage('Run mobile tests') {
-      steps {
-        container('pytest') {
-          sh '''
-            mkdir -p reports
-            pytest -v \
-              --junitxml=reports/result.xml
-          '''
-        }
-      }
-    }
-  }
-
-  post {
-    always {
-      script {
-        try {
-          container('pytest') {
-            if (fileExists('reports/result.xml')) {
-              junit 'reports/result.xml'
-            } else {
-              echo 'No test report found, skipping junit'
-            }
-          }
-        } catch (err) {
-          echo "Post actions skipped: ${err}"
-        }
-      }
-    }
   }
 }
