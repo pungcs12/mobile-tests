@@ -1,22 +1,22 @@
+import os
 import pytest
 from appium import webdriver
-import os
+from appium.options.android import UiAutomator2Options
 
-app_path = os.path.join(os.getcwd(), "ApiDemos-debug.apk")
 
 @pytest.fixture(scope="session")
 def driver():
-    caps = {
-        "platformName": "Android",
-        "automationName": "UiAutomator2",
-        "deviceName": "emulator-5554",
-        "app": app_path
-    }
+    app_path = os.path.abspath("app.apk")  # or tests/app.apk if needed
+
+    options = UiAutomator2Options()
+    options.platform_name = "Android"
+    options.automation_name = "UiAutomator2"
+    options.device_name = "emulator-5554"
+    options.app = app_path
 
     driver = webdriver.Remote(
-        "http://host.docker.internal:4723",
-        # "http://127.0.0.1:4723",
-        caps
+        "http://192.168.1.112:4723",
+        options=options
     )
 
     yield driver
