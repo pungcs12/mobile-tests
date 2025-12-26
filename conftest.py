@@ -6,7 +6,7 @@ from appium.options.android import UiAutomator2Options
 
 @pytest.fixture(scope="session")
 def driver():
-    app_path = os.path.abspath("app.apk")  # or tests/app.apk if needed
+    app_path = os.path.abspath("ApiDemos-debug.apk")  # or tests/app.apk if needed
 
     options = UiAutomator2Options()
     options.platform_name = "Android"
