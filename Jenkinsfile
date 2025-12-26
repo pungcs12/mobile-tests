@@ -36,14 +36,14 @@ spec:
       }
     }
 
-    // stage('Run tests') {
-    //   steps {
-    //     container('python') {
-    //       sh '''
-    //         pytest -v
-    //       '''
-    //     }
-    //   }
-    // }
+    stage('Run tests') {
+      steps {
+        container('python') {
+          sh '''
+            pytest -v
+          '''
+        }
+      }
+    }
   }
 }

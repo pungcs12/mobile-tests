@@ -15,6 +15,7 @@ def driver():
 
     driver = webdriver.Remote(
         "http://host.docker.internal:4723",
+        # "http://127.0.0.1:4723",
         caps
     )
 
